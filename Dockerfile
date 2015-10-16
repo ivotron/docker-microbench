@@ -2,8 +2,11 @@ FROM ivotron/phoronix
 
 ADD user-config.xml /root/.phoronix-test-suite/
 RUN apt-get update && \
+    phoronix-test-suite download-test-files \
+       pts/c-ray pts/crafty pts/stream && \
+    sed -i -e 's/\(cc.*\)/\1 \$CFLAGS/g' ~/.phoronix-test-suite/test-profiles/pts/stream-1.2.0/install.sh && \
     CFLAGS="-O0 -mtune=generic -march=x86-64" phoronix-test-suite install \
-       pts/c-ray pts/crafty pts/ramspeed pts/stream && \
+       pts/c-ray pts/crafty pts/stream && \
     apt-get remove --auto-remove -y \
        build-essential autoconf libnuma-dev mesa-utils unzip && \
     apt-get autoremove -y && \
