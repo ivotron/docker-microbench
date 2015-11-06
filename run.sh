@@ -35,10 +35,10 @@ if [ $? -ne 0 ] ; then
   exit 1
 fi
 
-json="{"
+json="["
 
 for bench in $BENCHMARKS ; do
-  json+="\n\"$bench\": {"
+  json+="\n{\n\"name\": \"$bench\","
   case $bench in
   crafty)
     result=`grep Crafty /tmp/out | awk -F',' '{print $2}'`
@@ -73,6 +73,6 @@ done
 # remove last comma
 json=`echo $json | sed 's/.$//'`
 
-json+="\n}"
+json+="\n]"
 
 echo -e "$json"
